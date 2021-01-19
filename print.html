@@ -5164,7 +5164,7 @@ Ok(&quot;Doug Suttles&quot;)
 Err(&quot;No CEO found for The Red-Headed League&quot;)
 Err(&quot;No CEO found for Stark Enterprises&quot;)
 </code></pre>
-<p><code>.and_then()</code> is a helpful message that takes an <code>Option</code>, then lets you do something to its value and pass it on. So its input is an <code>Option</code>, and its output is also an <code>Option</code>. It is sort of like a safe &quot;unwrap, then do something, then wrap again&quot;.</p>
+<p><code>.and_then()</code> is a helpful method that takes an <code>Option</code>, then lets you do something to its value and pass it on. So its input is an <code>Option</code>, and its output is also an <code>Option</code>. It is sort of like a safe &quot;unwrap, then do something, then wrap again&quot;.</p>
 <p>An easy example is a number that we get from a vec using <code>.get()</code>, because that returns an <code>Option</code>. Now we can pass it to <code>and_then()</code>, and do some math on it if it is <code>Some</code>. If it is <code>None</code>, then the <code>None</code> just gets passed through.</p>
 <pre><pre class="playground"><code class="language-rust">fn main() {
     let new_vec = vec![8, 9, 0]; // just a vec with numbers
@@ -5478,7 +5478,7 @@ Found a town: Taber with 8428 people
 Found a hamlet: Markerville with 45 people
 Found a town: Cardston with 3585 people
 </code></pre>
-<p>Finally, here is an example where we also use <code>.matches_indices()</code>. In this example we put names into a <code>struct</code> depending on the number of spaces in the <code>&amp;str</code>.</p>
+<p>Finally, here is an example where we also use <code>.match_indices()</code>. In this example we put names into a <code>struct</code> depending on the number of spaces in the <code>&amp;str</code>.</p>
 <pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
 struct Names {
     one_word: Vec&lt;String&gt;,
@@ -8777,9 +8777,9 @@ fn main() {
                 crate::country::province::print_province(province);
                 println!(&quot;in the city of {}&quot;, city);
             }
-            }
         }
     }
+}
 
 fn main() {
     crate::country::province::city::print_city(&quot;Canada&quot;, &quot;New Brunswick&quot;, &quot;Moncton&quot;);
@@ -9753,7 +9753,7 @@ Nicosia
 </code></pre></pre>
 <p>This prints <code>\u{ccad} \u{cd98} \u{c608} \u{cc2c}</code>.</p>
 <p>You can get a char from <code>u8</code> using the <code>From</code> trait, but for a <code>u32</code> you use <code>TryFrom</code> because it might not work. There are many more numbers in <code>u32</code> than characters in Unicode. We can see this with a simple demonstration.</p>
-<pre><pre class="playground"><code class="language-rust">use std::convert::TryFrom; // You need to brig TryFrom in to use it
+<pre><pre class="playground"><code class="language-rust">use std::convert::TryFrom; // You need to bring TryFrom in to use it
 use rand::prelude::*;      // We will use random numbers too
 
 fn main() {
