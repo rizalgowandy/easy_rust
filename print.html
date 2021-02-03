@@ -723,6 +723,7 @@ fn main() {
 </code></pre></pre>
 <p>So why did we write <code>{:?}</code> and not <code>{}</code>? We will talk about that now.</p>
 <h2><a class="header" href="#display-and-debug" id="display-and-debug">Display and debug</a></h2>
+<p><a href="https://youtu.be/jd3pC248c0o">See this chapter on YouTube</a></p>
 <p>Simple variables in Rust can be printed with <code>{}</code> inside <code>println!</code>. But some variables can't, and you need to <strong>debug print</strong>. Debug print is printing for the programmer, because it usually shows more information. Debug sometimes doesn't look pretty, because it has extra information to help you.</p>
 <p>How do you know if you need <code>{:?}</code> and not <code>{}</code>? The compiler will tell you. For example:</p>
 <pre><pre class="playground"><code class="language-rust">fn main() {
@@ -780,6 +781,7 @@ The smallest i128 is -170141183460469231731687303715884105728 and the biggest i1
 The smallest u128 is 0 and the biggest u128 is 340282366920938463463374607431768211455.
 </code></pre>
 <h2><a class="header" href="#mutability-changing" id="mutability-changing">Mutability (changing)</a></h2>
+<p><a href="https://youtu.be/Nyyd6qn7dZY">See this chapter on YouTube</a></p>
 <p>When you declare a variable with <code>let</code>, it is immutable (cannot be changed).</p>
 <p>This will not work:</p>
 <pre><pre class="playground"><code class="language-rust">fn main() {
@@ -803,6 +805,7 @@ The smallest u128 is 0 and the biggest u128 is 340282366920938463463374607431768
 </code></pre></pre>
 <p>You will see the same &quot;expected&quot; message from the compiler: <code>expected integer, found &amp;str</code>. <code>&amp;str</code> is a string type that we will learn soon.</p>
 <h3><a class="header" href="#shadowing" id="shadowing">Shadowing</a></h3>
+<p><a href="https://youtu.be/InULHyRGw7g">See this chapter on YouTube</a></p>
 <p>Shadowing means using <code>let</code> to declare a new variable with the same name as another variable. It looks like mutability, but it is completely different. Shadowing looks like this:</p>
 <pre><pre class="playground"><code class="language-rust">fn main() {
     let my_number = 8; // This is an i32
@@ -11077,10 +11080,7 @@ fn main() {
 }
 </code></pre></pre>
 <p>Here is what an output output looks like:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>Please type something, or x to escape:
+<pre><code class="language-text">Please type something, or x to escape:
 something
 You wrote something
 
@@ -11095,13 +11095,9 @@ You wrote x
 
 x
 You wrote x
-<span class="boring">}
-</span></code></pre></pre>
+</code></pre>
 <p>It takes our input and gives it back, and it even knows that we typed <code>x</code>. But it doesn't exit the program. The only way to get out is to close the window, or type ctrl and c. Let's change the <code>{}</code> to <code>{:?}</code> in <code>println!</code> to get more information (or you could use <code>dbg!(&amp;input_string)</code> if you like that macro). Now it says:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>Please type something, or x to escape:
+<pre><code class="language-text">Please type something, or x to escape:
 something
 You wrote &quot;something\r\n&quot;
 Something else
@@ -11110,8 +11106,7 @@ x
 You wrote &quot;x\r\n&quot;
 x
 You wrote &quot;x\r\n&quot;
-<span class="boring">}
-</span></code></pre></pre>
+</code></pre>
 <p>This is because the keyboard input is actually not just <code>something</code>, it is <code>something</code> and the <code>Enter</code> key. There is an easy method to fix this called <code>.trim()</code>, which removes all the whitespace. Whitespace, by the way, is all <a href="https://doc.rust-lang.org/reference/whitespace.html">these characters</a>:</p>
 <pre><code class="language-text">U+0009 (horizontal tab, '\t')
 U+000A (line feed, '\n')
@@ -11126,7 +11121,7 @@ U+2028 (line separator)
 U+2029 (paragraph separator)
 </code></pre>
 <p>So that will turn <code>x\r\n</code> into just <code>x</code>. Now it works:</p>
-<pre><code>use std::io;
+<pre><pre class="playground"><code class="language-rust">use std::io;
 
 fn main() {
     println!(&quot;Please type something, or x to escape:&quot;);
@@ -11139,7 +11134,7 @@ fn main() {
     }
     println!(&quot;See you later!&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p>Now it will print:</p>
 <pre><code class="language-text">Please type something, or x to escape:
 something
