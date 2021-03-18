@@ -7076,17 +7076,17 @@ fn main() {
 <span class="boring">}
 </span></code></pre></pre>
 <p><code>fn map&lt;B, F&gt;(self, f: F)</code> mean that it takes two generic types. <code>F</code> is a function that takes one item from the container implementing <code>.map()</code> and <code>B</code> is the return type of that function. Then after the <code>where</code> we see the trait bounds. (&quot;Trait bound&quot; means &quot;it must have this trait&quot;.) One is <code>Sized</code>, and the next is the closure signature. It must be an <code>FnMut</code>, and do the closure on <code>Self::Item</code>, which is the iterator that you give it. Then it returns <code>B</code>.</p>
-<p>So we can do the same thing to return a closure. To return a closure, use <code>impl</code> and then the closure signature. Once you return it, you can use it just like a function. Here is a small example of a function that gives you a closure depending on the number you put in. If you put 2 or 40 in then it multiplies it, and otherwise it gives you the same number. Because it's a closure we can do anything we want, so we also print a message.</p>
-<pre><pre class="playground"><code class="language-rust">fn returns_a_closure(input: u8) -&gt; impl FnMut(i32) -&gt; i32 {
+<p>So we can do the same thing to return a closure. To return a closure, use <code>impl</code> and then the closure signature. Once you return it, you can use it just like a function. Here is a small example of a function that gives you a closure depending on the text you put in. If you put &quot;double&quot; or &quot;triple&quot; in then it multiplies it by 2 or 3, and otherwise it gives you the same number. Because it's a closure we can do anything we want, so we also print a message.</p>
+<pre><pre class="playground"><code class="language-rust">fn returns_a_closure(input: &amp;str) -&gt; impl FnMut(i32) -&gt; i32 {
     match input {
-        2 =&gt; |mut number| {
+        &quot;double&quot; =&gt; |mut number| {
             number *= 2;
-            println!(&quot;Your number is {}&quot;, number);
+            println!(&quot;Doubling number. Now it is {}&quot;, number);
             number
         },
-        40 =&gt; |mut number| {
+        &quot;triple&quot; =&gt; |mut number| {
             number *= 40;
-            println!(&quot;Your number is {}&quot;, number);
+            println!(&quot;Tripling number. Now it is {}&quot;, number);
             number
         },
         _ =&gt; |number| {
@@ -7100,13 +7100,13 @@ fn main() {
     let my_number = 10;
 
     // Make three closures
-    let mut give_two = returns_a_closure(2);
-    let mut give_forty = returns_a_closure(40);
-    let mut give_fifty = returns_a_closure(50);
+    let mut doubles = returns_a_closure(&quot;double&quot;);
+    let mut triples = returns_a_closure(&quot;triple&quot;);
+    let mut quadruples = returns_a_closure(&quot;quadruple&quot;);
 
-    give_two(my_number);
-    give_forty(my_number);
-    give_fifty(my_number);
+    doubles(my_number);
+    triples(my_number);
+    quadruples(my_number);
 }
 </code></pre></pre>
 <p>Here is a bit longer example. Let's imagine a game where your character is facing monsters that are stronger at night. We can make an enum called <code>TimeOfDay</code> to keep track of the day. Your character is named Simon and has a number called <code>character_fear</code>, which is an <code>f64</code>. It goes up at night and down during the day. We will make a <code>change_fear</code> function that changes his fear, but also does other things like write messages. It could look like this:</p>
@@ -8960,7 +8960,35 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
   14: playground::two_is_two::{{closure}}
              at src/lib.rs:2
 </code></pre>
-<p>So let's turn backtrace off again and return to regular tests. Now we'll write some other functions, and use test functions to test them. Here are a few:</p>
+<p>Edit: Rust improved its backtrace messages in early 2021 to only show the most meaningful information. Now it's much easier to read:</p>
+<pre><code class="language-text">failures:
+
+---- two_is_two stdout ----
+thread 'two_is_two' panicked at 'assertion failed: `(left == right)`
+  left: `2`,
+ right: `3`', src/lib.rs:3:5
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/std/src/panicking.rs:493:5
+   1: core::panicking::panic_fmt
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/core/src/panicking.rs:92:14
+   2: playground::two_is_two
+             at ./src/lib.rs:3:5
+   3: playground::two_is_two::{{closure}}
+             at ./src/lib.rs:2:1
+   4: core::ops::function::FnOnce::call_once
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/core/src/ops/function.rs:227:5
+   5: core::ops::function::FnOnce::call_once
+             at /rustc/cb75ad5db02783e8b0222fee363c5f63f7e2cf5b/library/core/src/ops/function.rs:227:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+
+failures:
+    two_is_two
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+</code></pre>
+<p>Now let's turn backtrace off again and return to regular tests. Now we'll write some other functions, and use test functions to test them. Here are a few:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
