@@ -453,11 +453,13 @@ test tests::one_plus_one_is_two ... FAILED
 </span>const OKAY_CHARACTERS: &amp;str = &quot;1234567890+- &quot;;
 
 fn math(input: &amp;str) -&gt; i32 {
-    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
-        panic!(&quot;Please only input numbers, +-, or spaces&quot;);
+    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) ||
+       !input.chars().take(2).any(|character| character.is_numeric())
+    {
+        panic!(&quot;Please only input numbers, +-, or spaces.&quot;);
     }
 
-    let input = input.trim_end_matches(|x| &quot;+-&quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;(); // Remove + and - at the end, and all spaces
+    let input = input.trim_end_matches(|x| &quot;+- &quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;(); // Remove + and - at the end, and all spaces
     let mut result_vec = vec![]; // Results go in here
     let mut push_string = String::new(); // This is the string we push in every time. We will keep reusing it in the loop.
     for character in input.chars() {
@@ -496,7 +498,10 @@ fn math(input: &amp;str) -&gt; i32 {
     while let Some(entry) = math_iter.next() { // Iter through the items
         if entry.contains('-') { // If it has a - character, check if it's even or odd
             if entry.chars().count() % 2 == 1 {
-                adds = false;
+                adds = match adds {
+                    true =&gt; false,
+                    false =&gt; true
+                };
                 continue; // Go to the next item
             } else {
                 continue;
@@ -585,7 +590,6 @@ warning: equality checks against true are unnecessary
    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#bool_comparison
 </code></pre>
 <p>This is true: <code>for entry in math_iter</code> is much simpler than <code>while let Some(entry) = math_iter.next()</code>. And a <code>for</code> loop is actually an iterator so we don't have any reason to write <code>.iter()</code>. Thanks, clippy! And also we didn't need to make <code>math_iter</code>: we can just write <code>for entry in result_vec</code>.</p>
-<p>And the second point is true too: <code>if adds == true</code> can just be <code>if adds</code> (because <code>adds</code> = <code>true</code>).</p>
 <p>Now we'll start some real refactoring. Instead of separate variables, we will create a <code>Calculator</code> struct. This will have all the variables we used together. We will change two names to make it more clear. <code>result_vec</code> will become <code>results</code>, and <code>push_string</code> will become <code>current_input</code> (current means &quot;now&quot;). And so far it only has one method: new.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -637,11 +641,12 @@ impl Calculator {
 const OKAY_CHARACTERS: &amp;str = &quot;1234567890+- &quot;;
 
 fn math(input: &amp;str) -&gt; i32 {
-    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
+    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) ||
+       !input.chars().take(2).any(|character| character.is_numeric()) {
         panic!(&quot;Please only input numbers, +-, or spaces&quot;);
     }
 
-    let input = input.trim_end_matches(|x| &quot;+-&quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
+    let input = input.trim_end_matches(|x| &quot;+- &quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
     let mut calculator = Calculator::new();
 
     for character in input.chars() {
@@ -677,7 +682,10 @@ fn math(input: &amp;str) -&gt; i32 {
     for entry in calculator.results {
         if entry.contains('-') {
             if entry.chars().count() % 2 == 1 {
-                calculator.adds = false;
+                adds = match adds {
+                    true =&gt; false,
+                    false =&gt; true
+                };
                 continue;
             } else {
                 continue;
@@ -759,11 +767,12 @@ impl Calculator {
 const OKAY_CHARACTERS: &amp;str = &quot;1234567890+- &quot;;
 
 fn math(input: &amp;str) -&gt; i32 {
-    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) {
+    if !input.chars().all(|character| OKAY_CHARACTERS.contains(character)) ||
+       !input.chars().take(2).any(|character| character.is_numeric()) {
         panic!(&quot;Please only input numbers, +-, or spaces&quot;);
     }
 
-    let input = input.trim_end_matches(|x| &quot;+-&quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
+    let input = input.trim_end_matches(|x| &quot;+- &quot;.contains(x)).chars().filter(|x| *x != ' ').collect::&lt;String&gt;();
     let mut calculator = Calculator::new();
 
     for character in input.chars() {
@@ -799,7 +808,10 @@ fn math(input: &amp;str) -&gt; i32 {
     for entry in calculator.results {
         if entry.contains('-') {
             if entry.chars().count() % 2 == 1 {
-                calculator.adds = false;
+                adds = match adds {
+                    true =&gt; false,
+                    false =&gt; true
+                };
                 continue;
             } else {
                 continue;
