@@ -287,11 +287,11 @@
 <li><a href="Chapter_3.html#interior-mutability">Interior mutability</a>
 <ul>
 <li><a href="Chapter_3.html#cell">Cell</a></li>
-</ul>
-</li>
 <li><a href="Chapter_3.html#refcell">RefCell</a></li>
 <li><a href="Chapter_3.html#mutex">Mutex</a></li>
 <li><a href="Chapter_3.html#rwlock">RwLock</a></li>
+</ul>
+</li>
 <li><a href="Chapter_3.html#cow">Cow</a></li>
 <li><a href="Chapter_3.html#type-aliases">Type aliases</a>
 <ul>
@@ -1532,7 +1532,7 @@ fn main() {
 }
 </code></pre></pre>
 <p>So it's almost like saying <code>let my_number = { 100 };</code>.</p>
-<p>Also note that <code>my_number</code> is not <code>mut</code>. We didn't give it a value until we gave it 50, so it never changed its value. In the end, the real code for <code>my_number</code> is just let <code>my_number = 100;</code>.</p>
+<p>Also note that <code>my_number</code> is not <code>mut</code>. We didn't give it a value until we gave it 50, so it never changed its value. In the end, the real code for <code>my_number</code> is just <code>let my_number = 100;</code>.</p>
 <h2 id="collection-types"><a class="header" href="#collection-types">Collection types</a></h2>
 <p>Rust has a lot of types for making a collection. Collections are for when you need more than one value in one spot. For example, you could have information on all the cities in your country inside one variable. We will start with arrays, which are fastest but also have the least functionality. They are kind of like <code>&amp;str</code> in that way.</p>
 <h3 id="arrays"><a class="header" href="#arrays">Arrays</a></h3>
@@ -3022,7 +3022,7 @@ enum Result&lt;T, E&gt; {
 
 fn main() {}
 </code></pre></pre>
-<p>So Result has a value inside of <code>Ok</code>, and a value inside of <code>Err</code>. That is because errors usually (and should have) have information inside them.</p>
+<p>So Result has a value inside of <code>Ok</code>, and a value inside of <code>Err</code>. That is because errors usually contain information that describes the error.</p>
 <p><code>Result&lt;T, E&gt;</code> means you need to think of what you want to return for <code>Ok</code>, and what you want to return for <code>Err</code>. Actually, you can decide anything. Even this is okay:</p>
 <pre><pre class="playground"><code class="language-rust">fn check_error() -&gt; Result&lt;(), ()&gt; {
     Ok(())
@@ -3336,7 +3336,7 @@ Do we have L'Allemagne Moderne? true
 </span>pub fn entry(&amp;mut self, key: K) -&gt; Entry&lt;K, V&gt; // 🚧
 <span class="boring">}
 </span></code></pre></pre>
-<p><a href="https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html">Here is the page for Entry</a>. Here is a simple version of its code. <code>K</code> means key and <code>V</code> means variable.</p>
+<p><a href="https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html">Here is the page for Entry</a>. Here is a simple version of its code. <code>K</code> means key and <code>V</code> means value.</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3882,7 +3882,7 @@ fn main() {
 </code></pre></pre>
 <p>This prints <code>0</code> because <code>.unwrap_or(&amp;0)</code> gives a 0 even if it is a <code>None</code>.</p>
 <h2 id="traits"><a class="header" href="#traits">Traits</a></h2>
-<p>We have seen traits before: <code>Debug</code>, <code>Copy</code>, <code>Clone</code> are all traits. To give a type a trait, you have to implement it. Because <code>Debug</code> and the others are so common, we have attributes that automatically do it. That's what happens you write <code>#[derive(Debug)]</code>: you are automatically implementing <code>Debug</code>.</p>
+<p>We have seen traits before: <code>Debug</code>, <code>Copy</code>, <code>Clone</code> are all traits. To give a type a trait, you have to implement it. Because <code>Debug</code> and the others are so common, we have attributes that automatically do it. That's what happens when you write <code>#[derive(Debug)]</code>: you are automatically implementing <code>Debug</code>.</p>
 <pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
 struct MyStruct {
     number: usize,
@@ -5435,6 +5435,7 @@ None
 [5, 6, 7]
 [6, 7, 8]
 [7, 8, 9]
+[8, 9, 0]
 </code></pre>
 <p>By the way, <code>.chunks()</code> will panic if you give it nothing. You can write <code>.chunks(1000)</code> for a vector with one item, but you can't write <code>.chunks()</code> with anything with a length of 0. You can see that right in the function if you click on [src] because it says <code>assert!(chunk_size != 0);</code>.</p>
 <p><code>.match_indices()</code> lets you pull out everything inside a <code>String</code> or <code>&amp;str</code> that matches your input, and gives you the index too. It is similar to <code>.enumerate()</code> because it returns a tuple with two items.</p>
@@ -6474,7 +6475,7 @@ fn give_direction(direction: &amp;MapDirection) {
     }
 }
 </code></pre></pre>
-<p>We've seen that <code>::*</code> means &quot;import everything after the ::&quot;. In our case, that means <code>North</code>, <code>NorthEast</code>...and all the way to <code>NorthWest</code>. When you import other people's code you can do that too, but if the code is very large you might have problems. What if it has some items that are the same as your code? So it's usually best to not use <code>::*</code> all the time unless you're sure. A lot of times you see  a section called <code>prelude</code> in other people's code with all the main items you probably need. So then you will usually use it like this: <code>name::predule::*</code>. We will talk about this more in the sections for <code>modules</code> and <code>crates</code>.</p>
+<p>We've seen that <code>::*</code> means &quot;import everything after the ::&quot;. In our case, that means <code>North</code>, <code>NorthEast</code>...and all the way to <code>NorthWest</code>. When you import other people's code you can do that too, but if the code is very large you might have problems. What if it has some items that are the same as your code? So it's usually best to not use <code>::*</code> all the time unless you're sure. A lot of times you see  a section called <code>prelude</code> in other people's code with all the main items you probably need. So then you will usually use it like this: <code>name::prelude::*</code>. We will talk about this more in the sections for <code>modules</code> and <code>crates</code>.</p>
 <p>You can also use <code>as</code> to change the name. For example, maybe you are using someone else's code and you can't change the names in an enum:</p>
 <pre><pre class="playground"><code class="language-rust">enum FileState {
     CannotAccessFile,
@@ -9636,7 +9637,7 @@ fn three_die_six() -&gt; u8 { // A &quot;die&quot; is the thing you throw to get
     let mut generator = thread_rng(); // Create our random number generator
     let mut stat = 0; // This is the total
     for _ in 0..3 {
-        stat += generator.gen_range(1, 7); // Add each time
+        stat += generator.gen_range(1..=6); // Add each time
     }
     stat // Return the total
 }
@@ -9645,17 +9646,22 @@ fn four_die_six() -&gt; u8 {
     let mut generator = thread_rng();
     let mut results = vec![]; // First put the numbers in a vec
     for _ in 0..4 {
-        results.push(generator.gen_range(1, 7));
+        results.push(generator.gen_range(1..=6));
     }
     results.sort(); // Now a result like [4, 3, 2, 6] becomes [2, 3, 4, 6]
     results.remove(0); // Now it would be [3, 4, 6]
     results.iter().sum() // Return this result
 }
 
+enum Dice {
+    Three,
+    Four
+}
+
 impl Character {
-    fn new(three_dice: bool) -&gt; Self { // true for three dice, false for four
-        match three_dice {
-            true =&gt; Self {
+    fn new(dice: Dice) -&gt; Self { // true for three dice, false for four
+        match dice {
+            Dice::Three =&gt; Self {
                 strength: three_die_six(),
                 dexterity: three_die_six(),
                 constitution: three_die_six(),
@@ -9663,7 +9669,7 @@ impl Character {
                 wisdom: three_die_six(),
                 charisma: three_die_six(),
             },
-            false =&gt; Self {
+            Dice::Four =&gt; Self {
                 strength: four_die_six(),
                 dexterity: four_die_six(),
                 constitution: four_die_six(),
@@ -9703,8 +9709,8 @@ charisma: {}&quot;,
 
 
 fn main() {
-    let weak_billy = Character::new(true);
-    let strong_billy = Character::new(false);
+    let weak_billy = Character::new(Dice::Three);
+    let strong_billy = Character::new(Dice::Four);
     weak_billy.display();
     strong_billy.display();
 }
